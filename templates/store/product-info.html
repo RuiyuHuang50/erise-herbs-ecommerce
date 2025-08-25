@@ -1,0 +1,284 @@
+{% extends 'base.html' %} {% load static %} {% block title %}{{ product.title }}
+- Erise Herbs{% endblock %} {% block content %}
+<div class="container" style="padding: 100px 0">
+  <div class="row">
+    <!-- Product Image -->
+    <div class="col-md-6 mb-4">
+      <div class="product-image-detail">
+        <img
+          src="{{ product.image.url }}"
+          alt="{{ product.title }}"
+          class="img-fluid"
+          style="
+            border-radius: 20px;
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+          "
+          onerror="this.src='https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'"
+        />
+      </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="col-md-6">
+      <div class="product-details" style="padding: 2rem">
+        <!-- Category Badge -->
+        <span
+          class="category-badge"
+          style="
+            background: var(--accent-green);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+          "
+        >
+          {{ product.category.name }}
+        </span>
+
+        <!-- Product Title -->
+        <h1
+          style="
+            color: var(--dark-text);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+          "
+        >
+          {{ product.title }}
+        </h1>
+
+        <!-- Brand -->
+        <p
+          style="
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+          "
+        >
+          by <strong>{{ product.brand }}</strong>
+        </p>
+
+        <!-- Price -->
+        <div style="margin-bottom: 2rem">
+          <span
+            style="
+              font-size: 2.5rem;
+              font-weight: 700;
+              color: var(--primary-green);
+            "
+          >
+            ${{ product.price }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <div style="margin-bottom: 2rem">
+          <h3
+            style="
+              color: var(--dark-text);
+              font-size: 1.3rem;
+              margin-bottom: 1rem;
+            "
+          >
+            Description
+          </h3>
+          <p
+            style="
+              color: var(--light-text);
+              line-height: 1.8;
+              font-size: 1.1rem;
+            "
+          >
+            {{ product.description }}
+          </p>
+        </div>
+
+        <!-- Key Benefits -->
+        <div style="margin-bottom: 2rem">
+          <h3
+            style="
+              color: var(--dark-text);
+              font-size: 1.3rem;
+              margin-bottom: 1rem;
+            "
+          >
+            Key Benefits
+          </h3>
+          <ul style="color: var(--light-text); line-height: 1.8">
+            <li>100% Natural Plant Extract</li>
+            <li>Premium Quality Ingredients</li>
+            <li>FDA Certified & Lab Tested</li>
+            <li>Suitable for Health & Wellness Industries</li>
+          </ul>
+        </div>
+
+        <!-- Add to Cart Form -->
+        <form
+          action="{% url 'cart-add' %}"
+          method="POST"
+          style="margin-bottom: 2rem"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+          <div class="row align-items-center">
+            <div class="col-4">
+              <label
+                for="quantity"
+                style="font-weight: 600; color: var(--dark-text)"
+                >Quantity:</label
+              >
+              <input
+                type="number"
+                name="product_quantity"
+                value="1"
+                min="1"
+                max="10"
+                class="form-control"
+                style="
+                  border-radius: 10px;
+                  border: 2px solid var(--border-light);
+                  padding: 0.75rem;
+                "
+              />
+            </div>
+            <div class="col-8">
+              <button
+                type="submit"
+                class="add-to-cart-detail"
+                style="
+                  background: var(--primary-green);
+                  color: white;
+                  border: none;
+                  padding: 1rem 2rem;
+                  border-radius: 50px;
+                  font-weight: 600;
+                  font-size: 1.1rem;
+                  width: 100%;
+                  transition: all 0.3s ease;
+                "
+              >
+                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Product Info -->
+        <div
+          style="background: var(--cream); padding: 1.5rem; border-radius: 15px"
+        >
+          <div class="row text-center">
+            <div class="col-4">
+              <i
+                class="fas fa-leaf"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-bottom: 0.5rem;
+                "
+              ></i>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--light-text)">
+                Natural
+              </p>
+            </div>
+            <div class="col-4">
+              <i
+                class="fas fa-certificate"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-bottom: 0.5rem;
+                "
+              ></i>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--light-text)">
+                Certified
+              </p>
+            </div>
+            <div class="col-4">
+              <i
+                class="fas fa-shipping-fast"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-bottom: 0.5rem;
+                "
+              ></i>
+              <p style="margin: 0; font-size: 0.9rem; color: var(--light-text)">
+                Fast Shipping
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div style="margin-top: 80px">
+    <h2 class="section-title">Related Products</h2>
+    <div class="product-grid">
+      {% for related_product in related_products %}
+      <div class="product-card">
+        <div class="product-image">
+          <img
+            src="{{ related_product.image.url }}"
+            alt="{{ related_product.title }}"
+            onerror="this.src='https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"
+          />
+          <div class="product-badge">{{ related_product.category.name }}</div>
+        </div>
+        <div class="product-content">
+          <h3 class="product-title">{{ related_product.title }}</h3>
+          <p class="product-brand">{{ related_product.brand }}</p>
+          <div class="product-price">${{ related_product.price }}</div>
+          <a
+            href="{{ related_product.get_absolute_url }}"
+            class="btn btn-outline-success"
+            >View Details</a
+          >
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .add-to-cart-detail:hover {
+    background: var(--secondary-green) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .product-image-detail img:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+</style>
+{% endblock %} {% block extra_js %}
+<script>
+  // Add to cart animation for detail page
+  document
+    .querySelector(".add-to-cart-detail")
+    .addEventListener("click", function (e) {
+      const originalText = this.innerHTML;
+      this.innerHTML =
+        '<i class="fas fa-spinner fa-spin me-2"></i>Adding to Cart...';
+      this.disabled = true;
+
+      setTimeout(() => {
+        this.innerHTML = '<i class="fas fa-check me-2"></i>Added Successfully!';
+        setTimeout(() => {
+          this.innerHTML = originalText;
+          this.disabled = false;
+        }, 1500);
+      }, 800);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,291 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Erise Herbs - Empowering Wellness with Nature{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Empowering Wellness<br />with Nature</h1>
+      <p class="hero-subtitle">
+        Innovating Natural Ingredients for a Healthier World
+      </p>
+      <p class="hero-subtitle">
+        Premium quality plant extracts and herbal ingredients for health,
+        wellness, and beauty industries
+      </p>
+      <a href="#products" class="cta-button">Start Your Journey</a>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" id="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left;">We Truly Care About Your Health</h2>
+                <p>Erise INC. Specializes in the research, development, production and sales of natural plant extracts with nearly 10 years of experience in the identification, research, development and production of plant medicinal active ingredients, focusing on providing innovative products and services for customers in the health food, cosmetic and feed industries.</p>
+                <p><strong>DEDICATED TO PERSONAL PHYSICAL AND MENTAL FITNESS FOR PEOPLE OF ALL AGES.</strong></p>
+                <p style="font-style: italic; color: var(--primary-green);">- Shally, CEO</p>
+                <a href="#contact" class="btn btn-primary mt-4">Learn More About Us</a>
+            </div>
+            <div class="about-image">
+                <img src="{% static 'images/herbs-banner.jpg' %}" alt="Natural herbs and plant extracts" onerror="this.src='https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose Erise Herbs</h2>
+            <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h3 class="feature-title">Expert Research</h3>
+                <p class="feature-description">10+ Years of Experience in Research & Development of natural plant extracts and medicinal active ingredients.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3 class="feature-title">Certified Quality</h3>
+                <p class="feature-description">FDA, KOSHER, HALAL, ISO9001, ISO22000 Certified ensuring the highest quality standards.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3 class="feature-title">High-Quality Natural Ingredients</h3>
+                <p class="feature-description">Premium natural ingredients for various industries including health food, cosmetics, and feed industries.</p>
+            </div>
+        </div>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-section" id="products">
+  <div class="container">
+    <h2 class="section-title">Our Premium Products</h2>
+
+    <!-- Category Filter -->
+    <div class="text-center mb-4">
+      <a
+        href="{% url 'store' %}"
+        class="btn btn-secondary me-2 {% if not request.GET.category %}btn-primary{% endif %}"
+        >All Products</a
+      >
+      {% for category in links %}
+      <a href="{{ category.get_absolute_url }}" class="btn btn-secondary me-2"
+        >{{ category.name }}</a
+      >
+      {% endfor %}
+    </div>
+
+    <div class="product-grid">
+      {% for product in products %}
+      <div class="product-card">
+        <a href="{% url 'product-info' product_slug=product.slug %}" class="product-link">
+          <div class="product-image">
+            <img
+              src="{{ product.image.url }}"
+              alt="{{ product.title }}"
+              onerror="this.src='https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"
+            />
+            <div class="product-badge">{{ product.category.name }}</div>
+          </div>
+          <div class="product-content">
+            <h3 class="product-title">{{ product.title }}</h3>
+            <p class="product-brand">{{ product.brand }}</p>
+            <p class="product-description">
+              {{ product.description|truncatewords:15 }}
+            </p>
+            <div class="product-price">${{ product.price }}</div>
+          </div>
+        </a>
+        <div class="product-actions">
+          <form action="{% url 'cart-add' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}" />
+            <input type="hidden" name="product_quantity" value="1" />
+            <button type="submit" class="add-to-cart">
+              <i class="fas fa-cart-plus me-2"></i>Add to Cart
+            </button>
+          </form>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center">
+        <p class="text-muted">No products available at the moment.</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- View All Products Button -->
+    <div class="text-center mt-4">
+      <a href="{% url 'store' %}" class="btn btn-primary">View All Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter Section -->
+<section
+  style="background: var(--primary-green); padding: 60px 0; color: white"
+>
+  <div class="container text-center">
+    <h2 style="color: white; margin-bottom: 1rem">
+      Subscribe to Our Newsletter
+    </h2>
+    <p style="margin-bottom: 2rem; opacity: 0.9">
+      Get the latest updates on new products and wellness tips
+    </p>
+    <form
+      class="d-flex justify-content-center"
+      style="max-width: 500px; margin: 0 auto"
+    >
+      <input
+        type="email"
+        class="form-control me-2"
+        placeholder="Enter your email"
+        style="border-radius: 50px; padding: 0.75rem 1.5rem"
+      />
+      <button
+        type="submit"
+        class="btn"
+        style="
+          background: var(--accent-green);
+          color: white;
+          border-radius: 50px;
+          padding: 0.75rem 2rem;
+          border: none;
+        "
+      >
+        Subscribe
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" style="padding: 80px 0; background: var(--cream)">
+  <div class="container">
+    <h2 class="section-title">Connect With Us</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div
+          class="feature-icon mx-auto mb-3"
+          style="width: 60px; height: 60px"
+        >
+          <i class="fas fa-phone"></i>
+        </div>
+        <h4>Phone</h4>
+        <p>
+          <a href="tel:3238496556" style="color: var(--primary-green)"
+            >(323) 849-6556</a
+          >
+        </p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div
+          class="feature-icon mx-auto mb-3"
+          style="width: 60px; height: 60px"
+        >
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h4>Email</h4>
+        <p>
+          <a
+            href="mailto:shally@eriseherbs.com"
+            style="color: var(--primary-green)"
+            >shally@eriseherbs.com</a
+          >
+        </p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div
+          class="feature-icon mx-auto mb-3"
+          style="width: 60px; height: 60px"
+        >
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h4>Location</h4>
+        <p>Los Angeles, CA</p>
+      </div>
+    </div>
+  </div>
+</section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Add to cart with AJAX
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      
+      const form = this.closest('form');
+      const formData = new FormData(form);
+      const originalText = this.innerHTML;
+      
+      this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
+      this.disabled = true;
+
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.qty) {
+          // Update cart count in navigation if it exists
+          const cartCount = document.querySelector('.cart-count');
+          if (cartCount) {
+            cartCount.textContent = data.qty;
+          } else {
+            // Create cart count if it doesn't exist
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon && data.qty > 0) {
+              cartIcon.innerHTML += `<span class="cart-count">${data.qty}</span>`;
+            }
+          }
+          
+          this.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+          }, 1000);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        this.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i>Error';
+        setTimeout(() => {
+          this.innerHTML = originalText;
+          this.disabled = false;
+        }, 1000);
+      });
+    });
+  });
+
+  // Smooth scroll for CTA button
+  document.querySelector(".cta-button").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.querySelector("#products").scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+</script>
+{% endblock %}

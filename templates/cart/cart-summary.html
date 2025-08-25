@@ -1,0 +1,363 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Shopping Cart -
+Erise Herbs{% endblock %} {% block content %}
+<div class="container" style="padding: 100px 0">
+  <div class="row">
+    <div class="col-12">
+      <h1
+        style="
+          color: var(--primary-green);
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin-bottom: 2rem;
+          text-align: center;
+        "
+      >
+        <i class="fas fa-shopping-cart me-3"></i>Your Shopping Cart
+      </h1>
+    </div>
+  </div>
+
+  {% if cart %}
+  <div class="row">
+    <!-- Cart Items -->
+    <div class="col-lg-8 mb-4">
+      <div
+        style="
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          overflow: hidden;
+        "
+      >
+        {% for item in cart %}
+        <div
+          class="cart-item"
+          style="padding: 2rem; border-bottom: 1px solid var(--border-light)"
+        >
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <img
+                src="{{ item.product.image.url }}"
+                alt="{{ item.product.title }}"
+                style="
+                  width: 100%;
+                  height: 120px;
+                  object-fit: cover;
+                  border-radius: 15px;
+                "
+                onerror="this.src='https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80'"
+              />
+            </div>
+            <div class="col-md-6">
+              <h4
+                style="
+                  color: var(--dark-text);
+                  font-weight: 600;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                {{ item.product.title }}
+              </h4>
+              <p style="color: var(--light-text); margin-bottom: 0.5rem">
+                Brand: {{ item.product.brand }}
+              </p>
+              <p
+                style="
+                  color: var(--primary-green);
+                  font-size: 1.2rem;
+                  font-weight: 600;
+                  margin: 0;
+                "
+              >
+                ${{ item.price }}
+              </p>
+            </div>
+            <div class="col-md-3 text-end">
+              <div class="quantity-controls" style="margin-bottom: 1rem">
+                <label
+                  style="
+                    font-weight: 600;
+                    color: var(--dark-text);
+                    display: block;
+                    margin-bottom: 0.5rem;
+                  "
+                  >Quantity:</label
+                >
+                <div class="d-flex align-items-center justify-content-end">
+                  <form
+                    action="{% url 'cart-update' %}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    {% csrf_token %}
+                    <input
+                      type="hidden"
+                      name="product_id"
+                      value="{{ item.product.id }}"
+                    />
+                    <input
+                      type="hidden"
+                      name="product_quantity"
+                      value="{{ item.qty|add:'-1' }}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-secondary"
+                      style="border-radius: 50%; width: 35px; height: 35px"
+                    >
+                      -
+                    </button>
+                  </form>
+                  <span
+                    style="margin: 0 1rem; font-weight: 600; font-size: 1.1rem"
+                    >{{ item.qty }}</span
+                  >
+                  <form
+                    action="{% url 'cart-update' %}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    {% csrf_token %}
+                    <input
+                      type="hidden"
+                      name="product_id"
+                      value="{{ item.product.id }}"
+                    />
+                    <input
+                      type="hidden"
+                      name="product_quantity"
+                      value="{{ item.qty|add:'1' }}"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-secondary"
+                      style="border-radius: 50%; width: 35px; height: 35px"
+                    >
+                      +
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="item-total" style="margin-bottom: 1rem">
+                <strong style="color: var(--primary-green); font-size: 1.3rem"
+                  >${{ item.total }}</strong
+                >
+              </div>
+
+              <form action="{% url 'cart-delete' %}" method="POST">
+                {% csrf_token %}
+                <input
+                  type="hidden"
+                  name="product_id"
+                  value="{{ item.product.id }}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-outline-danger btn-sm"
+                  style="border-radius: 20px"
+                >
+                  <i class="fas fa-trash me-1"></i>Remove
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="col-lg-4">
+      <div
+        style="
+          background: var(--cream);
+          border-radius: 20px;
+          padding: 2rem;
+          position: sticky;
+          top: 100px;
+        "
+      >
+        <h3
+          style="
+            color: var(--dark-text);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+          "
+        >
+          Order Summary
+        </h3>
+
+        <div
+          style="
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+          "
+        >
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal ({{ cart.get_total_quantity }} items):</span>
+            <strong>${{ cart.get_total }}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <span>Free</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Tax:</span>
+            <span>Calculated at checkout</span>
+          </div>
+        </div>
+
+        <div
+          class="d-flex justify-content-between mb-3"
+          style="
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+          "
+        >
+          <span>Total:</span>
+          <span>${{ cart.get_total }}</span>
+        </div>
+
+        <div class="d-grid gap-2">
+          <a
+            href="{% url 'checkout' %}"
+            class="btn btn-success btn-lg"
+            style="
+              background: var(--primary-green);
+              border: none;
+              border-radius: 50px;
+              padding: 1rem;
+              font-weight: 600;
+            "
+          >
+            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+          </a>
+          <a
+            href="{% url 'store' %}"
+            class="btn btn-outline-success"
+            style="border-radius: 50px; padding: 0.75rem"
+          >
+            <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="text-center mt-4">
+          <div class="row text-center">
+            <div class="col-4">
+              <i
+                class="fas fa-shield-alt"
+                style="color: var(--accent-green); font-size: 1.5rem"
+              ></i>
+              <p style="font-size: 0.8rem; margin: 0.5rem 0 0 0">Secure</p>
+            </div>
+            <div class="col-4">
+              <i
+                class="fas fa-shipping-fast"
+                style="color: var(--accent-green); font-size: 1.5rem"
+              ></i>
+              <p style="font-size: 0.8rem; margin: 0.5rem 0 0 0">Fast Ship</p>
+            </div>
+            <div class="col-4">
+              <i
+                class="fas fa-medal"
+                style="color: var(--accent-green); font-size: 1.5rem"
+              ></i>
+              <p style="font-size: 0.8rem; margin: 0.5rem 0 0 0">Quality</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- Empty Cart -->
+  <div class="row">
+    <div class="col-12">
+      <div
+        class="text-center"
+        style="
+          padding: 4rem 2rem;
+          background: var(--cream);
+          border-radius: 20px;
+        "
+      >
+        <i
+          class="fas fa-shopping-cart"
+          style="font-size: 5rem; color: var(--light-text); margin-bottom: 2rem"
+        ></i>
+        <h2 style="color: var(--dark-text); margin-bottom: 1rem">
+          Your Cart is Empty
+        </h2>
+        <p
+          style="
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+          "
+        >
+          Looks like you haven't added any items to your cart yet.
+        </p>
+        <a
+          href="{% url 'store' %}"
+          class="btn btn-primary btn-lg"
+          style="
+            background: var(--primary-green);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+          "
+        >
+          <i class="fas fa-leaf me-2"></i>Start Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Recommended Products -->
+<section style="padding: 80px 0; background: var(--white)">
+  <div class="container">
+    <h2 class="section-title">You Might Also Like</h2>
+    <div class="product-grid">
+      <!-- This would be populated with recommended products -->
+      <div
+        style="
+          grid-column: 1 / -1;
+          text-align: center;
+          color: var(--light-text);
+          padding: 2rem;
+        "
+      >
+        <p>Check out our latest products while your cart loads...</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %} {% block extra_js %}
+<script>
+  // Add smooth animations for cart updates
+  document.querySelectorAll("form").forEach((form) => {
+    if (
+      form.action.includes("cart-update") ||
+      form.action.includes("cart-delete")
+    ) {
+      form.addEventListener("submit", function () {
+        const button = this.querySelector("button");
+        if (button) {
+          button.disabled = true;
+          if (this.action.includes("cart-delete")) {
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+          }
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

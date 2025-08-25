@@ -1,0 +1,441 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Register - Erise
+Herbs{% endblock %} {% block content %}
+<div class="container" style="padding: 100px 0">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div
+        style="
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+          padding: 3rem;
+          text-align: center;
+        "
+      >
+        <!-- Logo/Brand -->
+        <div style="margin-bottom: 2rem">
+          <i
+            class="fas fa-leaf"
+            style="
+              font-size: 3rem;
+              color: var(--accent-green);
+              margin-bottom: 1rem;
+            "
+          ></i>
+          <h2 style="color: var(--primary-green); font-weight: 700; margin: 0">
+            Join Erise Herbs
+          </h2>
+          <p style="color: var(--light-text); margin-top: 0.5rem">
+            Create your account for natural wellness
+          </p>
+        </div>
+
+        <!-- Registration Form -->
+        <form method="POST" action="{% url 'register' %}">
+          {% csrf_token %} {% if messages %}
+          <div
+            class="alert alert-danger"
+            style="border-radius: 15px; margin-bottom: 1.5rem"
+          >
+            {% for message in messages %} {{ message }} {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="row">
+            <div class="col-6 mb-3" style="text-align: left">
+              <label
+                for="first_name"
+                style="
+                  font-weight: 600;
+                  color: var(--dark-text);
+                  margin-bottom: 0.5rem;
+                "
+                >First Name</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="first_name"
+                name="first_name"
+                required
+                style="
+                  border-radius: 15px;
+                  padding: 1rem;
+                  border: 2px solid var(--border-light);
+                "
+              />
+            </div>
+            <div class="col-6 mb-3" style="text-align: left">
+              <label
+                for="last_name"
+                style="
+                  font-weight: 600;
+                  color: var(--dark-text);
+                  margin-bottom: 0.5rem;
+                "
+                >Last Name</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="last_name"
+                name="last_name"
+                required
+                style="
+                  border-radius: 15px;
+                  padding: 1rem;
+                  border: 2px solid var(--border-light);
+                "
+              />
+            </div>
+          </div>
+
+          <div class="mb-3" style="text-align: left">
+            <label
+              for="username"
+              style="
+                font-weight: 600;
+                color: var(--dark-text);
+                margin-bottom: 0.5rem;
+              "
+              >Username</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+              style="
+                border-radius: 15px;
+                padding: 1rem;
+                border: 2px solid var(--border-light);
+              "
+            />
+          </div>
+
+          <div class="mb-3" style="text-align: left">
+            <label
+              for="email"
+              style="
+                font-weight: 600;
+                color: var(--dark-text);
+                margin-bottom: 0.5rem;
+              "
+              >Email Address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+              style="
+                border-radius: 15px;
+                padding: 1rem;
+                border: 2px solid var(--border-light);
+              "
+            />
+          </div>
+
+          <div class="mb-3" style="text-align: left">
+            <label
+              for="password1"
+              style="
+                font-weight: 600;
+                color: var(--dark-text);
+                margin-bottom: 0.5rem;
+              "
+              >Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="password1"
+              name="password1"
+              required
+              style="
+                border-radius: 15px;
+                padding: 1rem;
+                border: 2px solid var(--border-light);
+              "
+            />
+          </div>
+
+          <div class="mb-4" style="text-align: left">
+            <label
+              for="password2"
+              style="
+                font-weight: 600;
+                color: var(--dark-text);
+                margin-bottom: 0.5rem;
+              "
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="password2"
+              name="password2"
+              required
+              style="
+                border-radius: 15px;
+                padding: 1rem;
+                border: 2px solid var(--border-light);
+              "
+            />
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="mb-3" style="text-align: left">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="terms"
+                required
+              />
+              <label
+                class="form-check-label"
+                for="terms"
+                style="color: var(--light-text); font-size: 0.9rem"
+              >
+                I agree to the
+                <a href="#" style="color: var(--primary-green)"
+                  >Terms of Service</a
+                >
+                and
+                <a href="#" style="color: var(--primary-green)"
+                  >Privacy Policy</a
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Newsletter Subscription -->
+          <div class="mb-4" style="text-align: left">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="newsletter"
+                name="newsletter"
+              />
+              <label
+                class="form-check-label"
+                for="newsletter"
+                style="color: var(--light-text); font-size: 0.9rem"
+              >
+                Subscribe to our newsletter for wellness tips and exclusive
+                offers
+              </label>
+            </div>
+          </div>
+
+          <div class="d-grid mb-3">
+            <button
+              type="submit"
+              class="btn btn-success btn-lg"
+              style="
+                background: var(--primary-green);
+                border: none;
+                border-radius: 50px;
+                padding: 1rem;
+                font-weight: 600;
+                font-size: 1.1rem;
+              "
+            >
+              <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+          </div>
+        </form>
+
+        <!-- Divider -->
+        <div style="margin: 2rem 0; position: relative">
+          <hr style="border-color: var(--border-light)" />
+          <span
+            style="
+              background: white;
+              padding: 0 1rem;
+              color: var(--light-text);
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            "
+            >OR</span
+          >
+        </div>
+
+        <!-- Login Link -->
+        <div style="text-align: center">
+          <p style="color: var(--light-text); margin-bottom: 1rem">
+            Already have an account?
+          </p>
+          <a
+            href="{% url 'my-login' %}"
+            class="btn btn-outline-success"
+            style="border-radius: 50px; padding: 0.75rem 2rem; font-weight: 600"
+          >
+            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+          </a>
+        </div>
+      </div>
+
+      <!-- Welcome Benefits -->
+      <div
+        style="
+          background: var(--cream);
+          border-radius: 20px;
+          padding: 2rem;
+          margin-top: 2rem;
+        "
+      >
+        <h4
+          style="
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            text-align: center;
+          "
+        >
+          Welcome to Erise Herbs Family
+        </h4>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-certificate"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-right: 1rem;
+                "
+              ></i>
+              <div>
+                <h6 style="margin: 0; color: var(--dark-text)">
+                  Premium Quality
+                </h6>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--light-text)"
+                >
+                  FDA certified products
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-shipping-fast"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-right: 1rem;
+                "
+              ></i>
+              <div>
+                <h6 style="margin: 0; color: var(--dark-text)">
+                  Fast Delivery
+                </h6>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--light-text)"
+                >
+                  Free shipping on orders
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-percent"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-right: 1rem;
+                "
+              ></i>
+              <div>
+                <h6 style="margin: 0; color: var(--dark-text)">
+                  Exclusive Deals
+                </h6>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--light-text)"
+                >
+                  Member-only discounts
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex align-items-center">
+              <i
+                class="fas fa-heart"
+                style="
+                  color: var(--accent-green);
+                  font-size: 1.5rem;
+                  margin-right: 1rem;
+                "
+              ></i>
+              <div>
+                <h6 style="margin: 0; color: var(--dark-text)">
+                  Wellness Support
+                </h6>
+                <p
+                  style="margin: 0; font-size: 0.9rem; color: var(--light-text)"
+                >
+                  Expert health guidance
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extra_js %}
+<script>
+  // Add focus effects to form inputs
+  document.querySelectorAll(".form-control").forEach((input) => {
+    input.addEventListener("focus", function () {
+      this.style.borderColor = "var(--accent-green)";
+      this.style.boxShadow = "0 0 0 0.2rem rgba(111, 165, 116, 0.25)";
+    });
+
+    input.addEventListener("blur", function () {
+      this.style.borderColor = "var(--border-light)";
+      this.style.boxShadow = "none";
+    });
+  });
+
+  // Password validation
+  document.getElementById("password2").addEventListener("input", function () {
+    const password1 = document.getElementById("password1").value;
+    const password2 = this.value;
+
+    if (password1 && password2) {
+      if (password1 === password2) {
+        this.style.borderColor = "var(--accent-green)";
+      } else {
+        this.style.borderColor = "#dc3545";
+      }
+    }
+  });
+
+  // Add loading state to register button
+  document.querySelector("form").addEventListener("submit", function (e) {
+    const terms = document.getElementById("terms").checked;
+    if (!terms) {
+      e.preventDefault();
+      alert("Please accept the Terms of Service and Privacy Policy");
+      return;
+    }
+
+    const button = this.querySelector('button[type="submit"]');
+    button.innerHTML =
+      '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
+    button.disabled = true;
+  });
+</script>
+{% endblock %}
