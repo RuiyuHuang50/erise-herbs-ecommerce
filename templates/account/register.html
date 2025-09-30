@@ -41,54 +41,18 @@ Herbs{% endblock %} {% block content %}
           </div>
           {% endif %}
 
-          <div class="row">
-            <div class="col-6 mb-3" style="text-align: left">
-              <label
-                for="first_name"
-                style="
-                  font-weight: 600;
-                  color: var(--dark-text);
-                  margin-bottom: 0.5rem;
-                "
-                >First Name</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="first_name"
-                name="first_name"
-                required
-                style="
-                  border-radius: 15px;
-                  padding: 1rem;
-                  border: 2px solid var(--border-light);
-                "
-              />
-            </div>
-            <div class="col-6 mb-3" style="text-align: left">
-              <label
-                for="last_name"
-                style="
-                  font-weight: 600;
-                  color: var(--dark-text);
-                  margin-bottom: 0.5rem;
-                "
-                >Last Name</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="last_name"
-                name="last_name"
-                required
-                style="
-                  border-radius: 15px;
-                  padding: 1rem;
-                  border: 2px solid var(--border-light);
-                "
-              />
-            </div>
+          <!-- Display Django form errors -->
+          {% if form.errors %}
+          <div
+            class="alert alert-danger"
+            style="border-radius: 15px; margin-bottom: 1.5rem"
+          >
+            {% for field, errors in form.errors.items %} {% for error in errors
+            %}
+            <div>{{ error }}</div>
+            {% endfor %} {% endfor %}
           </div>
+          {% endif %}
 
           <div class="mb-3" style="text-align: left">
             <label
@@ -100,18 +64,7 @@ Herbs{% endblock %} {% block content %}
               "
               >Username</label
             >
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              name="username"
-              required
-              style="
-                border-radius: 15px;
-                padding: 1rem;
-                border: 2px solid var(--border-light);
-              "
-            />
+            {{ form.username }}
           </div>
 
           <div class="mb-3" style="text-align: left">
@@ -124,18 +77,7 @@ Herbs{% endblock %} {% block content %}
               "
               >Email Address</label
             >
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              required
-              style="
-                border-radius: 15px;
-                padding: 1rem;
-                border: 2px solid var(--border-light);
-              "
-            />
+            {{ form.email }}
           </div>
 
           <div class="mb-3" style="text-align: left">
@@ -148,18 +90,7 @@ Herbs{% endblock %} {% block content %}
               "
               >Password</label
             >
-            <input
-              type="password"
-              class="form-control"
-              id="password1"
-              name="password1"
-              required
-              style="
-                border-radius: 15px;
-                padding: 1rem;
-                border: 2px solid var(--border-light);
-              "
-            />
+            {{ form.password1 }}
           </div>
 
           <div class="mb-4" style="text-align: left">
@@ -172,18 +103,7 @@ Herbs{% endblock %} {% block content %}
               "
               >Confirm Password</label
             >
-            <input
-              type="password"
-              class="form-control"
-              id="password2"
-              name="password2"
-              required
-              style="
-                border-radius: 15px;
-                padding: 1rem;
-                border: 2px solid var(--border-light);
-              "
-            />
+            {{ form.password2 }}
           </div>
 
           <!-- Terms and Conditions -->
@@ -409,24 +329,29 @@ Herbs{% endblock %} {% block content %}
     });
   });
 
-  // Password validation
-  document.getElementById("password2").addEventListener("input", function () {
-    const password1 = document.getElementById("password1").value;
-    const password2 = this.value;
+  // Password validation - use Django form field IDs
+  const password1Field = document.querySelector('input[name="password1"]');
+  const password2Field = document.querySelector('input[name="password2"]');
 
-    if (password1 && password2) {
-      if (password1 === password2) {
-        this.style.borderColor = "var(--accent-green)";
-      } else {
-        this.style.borderColor = "#dc3545";
+  if (password1Field && password2Field) {
+    password2Field.addEventListener("input", function () {
+      const password1 = password1Field.value;
+      const password2 = this.value;
+
+      if (password1 && password2) {
+        if (password1 === password2) {
+          this.style.borderColor = "var(--accent-green)";
+        } else {
+          this.style.borderColor = "#dc3545";
+        }
       }
-    }
-  });
+    });
+  }
 
   // Add loading state to register button
   document.querySelector("form").addEventListener("submit", function (e) {
-    const terms = document.getElementById("terms").checked;
-    if (!terms) {
+    const terms = document.getElementById("terms");
+    if (terms && !terms.checked) {
       e.preventDefault();
       alert("Please accept the Terms of Service and Privacy Policy");
       return;

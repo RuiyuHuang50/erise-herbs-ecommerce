@@ -133,6 +133,7 @@
               class="flex-grow-1"
             >
               {% csrf_token %}
+              <input type="hidden" name="action" value="post" />
               <input type="hidden" name="product_id" value="{{ product.id }}" />
               <input type="hidden" name="product_quantity" value="1" />
               <button type="submit" class="add-to-cart">
@@ -211,20 +212,69 @@
 </section>
 {% endblock %} {% block extra_js %}
 <script>
-  // Add to cart animation
+  // Add to cart with AJAX
   document.querySelectorAll(".add-to-cart").forEach((button) => {
     button.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const form = this.closest("form");
+      if (!form) {
+        console.error("Form not found");
+        return;
+      }
+
+      const formData = new FormData(form);
       const originalText = this.innerHTML;
+      const actionUrl = form.getAttribute("action");
+
+      if (!actionUrl) {
+        console.error("Form action not found");
+        return;
+      }
+
       this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
       this.disabled = true;
 
-      setTimeout(() => {
-        this.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
-        setTimeout(() => {
-          this.innerHTML = originalText;
-          this.disabled = false;
-        }, 1000);
-      }, 500);
+      fetch(actionUrl, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.qty) {
+            // Update cart count in navigation if it exists
+            const cartCount = document.querySelector(".cart-count");
+            if (cartCount) {
+              cartCount.textContent = data.qty;
+            } else {
+              // Create cart count if it doesn't exist
+              const cartIcon = document.querySelector(".cart-icon");
+              if (cartIcon && data.qty > 0) {
+                cartIcon.innerHTML += `<span class="cart-count">${data.qty}</span>`;
+              }
+            }
+
+            this.innerHTML = '<i class="fas fa-check me-2"></i>Added!';
+            setTimeout(() => {
+              this.innerHTML = originalText;
+              this.disabled = false;
+            }, 1000);
+          } else {
+            throw new Error("Invalid response");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          this.innerHTML =
+            '<i class="fas fa-exclamation-triangle me-2"></i>Error';
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+          }, 1000);
+        });
     });
   });
 

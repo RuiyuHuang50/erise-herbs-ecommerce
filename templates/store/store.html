@@ -114,6 +114,7 @@
         <div class="product-actions">
           <form action="{% url 'cart-add' %}" method="POST">
             {% csrf_token %}
+            <input type="hidden" name="action" value="post" />
             <input type="hidden" name="product_id" value="{{ product.id }}" />
             <input type="hidden" name="product_quantity" value="1" />
             <button type="submit" class="add-to-cart">
@@ -234,13 +235,24 @@
       e.preventDefault();
       
       const form = this.closest('form');
+      if (!form) {
+        console.error('Form not found');
+        return;
+      }
+      
       const formData = new FormData(form);
       const originalText = this.innerHTML;
+      const actionUrl = form.getAttribute('action');
+      
+      if (!actionUrl) {
+        console.error('Form action not found');
+        return;
+      }
       
       this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Adding...';
       this.disabled = true;
 
-      fetch(form.action, {
+      fetch(actionUrl, {
         method: 'POST',
         body: formData,
         headers: {
@@ -267,6 +279,8 @@
             this.innerHTML = originalText;
             this.disabled = false;
           }, 1000);
+        } else {
+          throw new Error('Invalid response');
         }
       })
       .catch(error => {

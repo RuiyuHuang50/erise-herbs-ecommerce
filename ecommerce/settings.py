@@ -162,15 +162,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email configuration settings:
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_USE_TLS = 'True'
+# For development - emails will be printed to console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Be sure to read the guide in the resources folder of this lecture (SETUP THE EMAIL BACKEND)
-
-EMAIL_HOST_USER = '' # - Enter your GMAIL address # The host email that sends password reset emails
-EMAIL_HOST_PASSWORD = '' # - Enter your app password 
+# For production SMTP (currently disabled)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = '587'
+# EMAIL_USE_TLS = 'True'
+# EMAIL_HOST_USER = '' # - Enter your GMAIL address # The host email that sends password reset emails
+# EMAIL_HOST_PASSWORD = '' # - Enter your app password 
 
 
 

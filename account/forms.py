@@ -21,8 +21,25 @@ class CreateUserForm(UserCreationForm):
         super(CreateUserForm, self).__init__(*args, **kwargs)
 
         # Mark email as required
-
         self.fields['email'].required = True
+        
+        # Add CSS classes to form fields
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-control',
+            'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+        })
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-control',
+            'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+        })
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control',
+            'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control',
+            'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+        })
 
 
     # Email validation
@@ -50,8 +67,14 @@ class CreateUserForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
 
-    username = forms.CharField(widget=TextInput())
-    password = forms.CharField(widget=PasswordInput())
+    username = forms.CharField(widget=TextInput(attrs={
+        'class': 'form-control',
+        'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+    }))
+    password = forms.CharField(widget=PasswordInput(attrs={
+        'class': 'form-control',
+        'style': 'border-radius: 15px; padding: 1rem; border: 2px solid var(--border-light); font-size: 1.1rem;'
+    }))
 
 
 

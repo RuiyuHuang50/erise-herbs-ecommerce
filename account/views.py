@@ -45,8 +45,14 @@ def register(request):
             user.is_active = True
             user.save()
 
+            # Success message
+            messages.success(request, 'Account created successfully! You can now log in.')
+
             # Redirect to login page after successful registration
             return redirect('my-login')
+        
+        else:
+            messages.error(request, 'Please correct the errors below')
 
 
 
@@ -122,6 +128,12 @@ def my_login(request):
                 auth.login(request, user)
 
                 return redirect("dashboard")
+            
+            else:
+                messages.error(request, 'Invalid username or password')
+        
+        else:
+            messages.error(request, 'Please correct the errors below')
 
 
     context = {'form':form}
