@@ -47,10 +47,11 @@ Herbs{% endblock %} {% block content %}
             class="alert alert-danger"
             style="border-radius: 15px; margin-bottom: 1.5rem"
           >
-            {% for field, errors in form.errors.items %} {% for error in errors
-            %}
-            <div>{{ error }}</div>
-            {% endfor %} {% endfor %}
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            {% endfor %}
           </div>
           {% endif %}
 
