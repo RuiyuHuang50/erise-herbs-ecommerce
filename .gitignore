@@ -123,5 +123,5 @@ cython_debug/
 ehthumbs.db
 Thumbs.db
 
-# Media files (since we're using external URLs for images)
-media/
+# Media files (temporarily allowing for deployment)
+# media/
